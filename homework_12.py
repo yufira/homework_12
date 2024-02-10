@@ -1,5 +1,6 @@
 import re
 import csv
+import os
 from collections import UserDict
 from datetime import datetime
 
@@ -278,7 +279,11 @@ def exit_handler():
 
 @input_error
 def main(address_book):
-    address_book.address_book_reader()
+    if os.path.exists('address_book.csv'):
+        address_book.address_book_reader()
+    else:
+        address_book.address_book_writer()
+
     handlers_with_command = {
         'add': add_handler,
         'change': change_handler,
