@@ -32,7 +32,7 @@ class Name(Field):
 
     def is_valid(self, value):
         for i in value:
-            if not (i.isalpha() or i.isspace()):
+            if not (i.isalnum() or i.isspace()):
                 return False
         return True
 
@@ -186,7 +186,7 @@ def hello_handler():
 
 @input_error
 def add_handler(address_book, command):
-    pattern = r'^add [a-zA-Zа-яА-Я]{2,} \d{10,}$'
+    pattern = r'^add [a-zA-Zа-яА-Я\d\s]{2,} \d{10,}$'
     if re.fullmatch(pattern, command):
         splitted_command = command.split()
         name = splitted_command[1]
@@ -261,14 +261,14 @@ def search_handler(address_book, command):
     search_data = splitted_command[1]
     user_list = []
     for record in address_book.data.values():
-        if search_data.isalpha():
-            pattern = re.compile(f'{search_data}', re.IGNORECASE)
-            if re.search(pattern, str(record.name.value)):
-                user_list.append(str(record.name.value))
-        elif search_data.isdigit():
-            for phone in record.phones:
-                if search_data in phone.value:
-                    user_list.append(str(record.name.value))
+        if search_data.isalnum():
+            name_matches = re.search(search_data, record.name.value, re.IGNORECASE)
+            phone_matches = any(
+                re.search(search_data, phone.value)
+                for phone in record.phones
+            )
+            if name_matches or phone_matches:
+                user_list.append(str(record))
     return user_list
 
 
