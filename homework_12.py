@@ -207,7 +207,7 @@ def add_handler(address_book, command):
 
 @input_error
 def change_handler(address_book, command):
-    pattern = r'^change [a-zA-Zа-яА-Я]{2,} \d{10,}$'
+    pattern = r'^change [a-zA-Zа-яА-Я\d\s]{2,} \d{10,}$'
     if re.fullmatch(pattern, command):
         splitted_command = command.split()
         name = splitted_command[1]
@@ -225,7 +225,7 @@ def change_handler(address_book, command):
 
 @input_error
 def phone_handler(address_book, command):
-    pattern = r'^phone [a-zA-Zа-яА-Я]{2,}$'
+    pattern = r'^phone [a-zA-Zа-яА-Я\d\s]{2,}$'
     if re.fullmatch(pattern, command):
         splitted_command = command.split()
         name = splitted_command[1]
